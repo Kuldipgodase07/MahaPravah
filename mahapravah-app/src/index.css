@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-cream-50 text-stone-900;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  .font-devanagari {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+  }
+
+  .font-display {
+    font-family: 'Manrope', 'Inter', sans-serif;
+  }
+
+  .font-poppins {
+    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+  }
+}
+
+/* Marathi Website Poppins Font Enforcement */
+html[data-lang="mr"],
+html[data-lang="mr"] body,
+body.lang-mr {
+  font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif !important;
+}
+
+html[data-lang="mr"] h1,
+html[data-lang="mr"] h2,
+html[data-lang="mr"] h3,
+html[data-lang="mr"] h4,
+html[data-lang="mr"] h5,
+html[data-lang="mr"] h6,
+html[data-lang="mr"] p,
+html[data-lang="mr"] span,
+html[data-lang="mr"] a,
+html[data-lang="mr"] button,
+html[data-lang="mr"] input,
+html[data-lang="mr"] .devanagari-text,
+body.lang-mr h1,
+body.lang-mr h2,
+body.lang-mr h3,
+body.lang-mr h4,
+body.lang-mr h5,
+body.lang-mr h6,
+body.lang-mr p,
+body.lang-mr span,
+body.lang-mr a,
+body.lang-mr button,
+body.lang-mr input,
+body.lang-mr .devanagari-text {
+  font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif !important;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-saffron-600 text-white font-semibold rounded-full
+           hover:bg-saffron-700 transition-all duration-200 shadow-sm hover:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 border-2 border-brown-600 text-brown-600 font-semibold rounded-full
+           hover:bg-brown-600 hover:text-white transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-brown-500 focus:ring-offset-2;
+  }
+
+  .btn-outline-white {
+    @apply inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full
+           hover:bg-white hover:text-brown-800 transition-all duration-200;
+  }
+
+  .section-label {
+    @apply text-xs font-bold tracking-widest uppercase text-saffron-600 mb-3;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-brown-800 leading-tight;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .section-title-light {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .section-subtitle {
+    @apply text-base md:text-lg text-stone-600 leading-relaxed;
+  }
+
+  .card-premium {
+    @apply bg-white rounded-2xl border border-brown-100 shadow-card hover:shadow-hover
+           transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .orange-divider {
+    @apply w-12 h-1 bg-saffron-600 rounded-full;
+  }
+
+  .devanagari-text {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    line-height: 1.4;
+  }
+}
+
+@layer utilities {
+  .text-gradient-saffron {
+    background: linear-gradient(135deg, #F56600, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .bg-glass-dark {
+    background: rgba(74, 36, 20, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .border-brand {
+    border-color: rgba(107, 53, 27, 0.12);
+  }
+
+  .wave-orange {
+    fill: #F56600;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes countUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes progressFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* Progress bar animation */
+.progress-animate {
+  animation: progressFill 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* SVG path animations */
+.path-animate {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease forwards;
+}
+
+/* Splash transition */
+.splash-exit {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Ecosystem node glow */
+.node-glow {
+  filter: drop-shadow(0 0 8px rgba(245, 102, 0, 0.3));
+}
+
+/* Scrolled nav */
+.nav-scrolled {
+  @apply bg-white shadow-nav;
+}
+
+/* Intersection observer fade-up class */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Counter animation */
+@keyframes countIncrement {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.counter-animate {
+  animation: countIncrement 0.5s ease forwards;
+}
+
+/* Maharashtra map styling */
+.maharashtra-map path {
+  fill: rgba(245, 102, 0, 0.15);
+  stroke: rgba(245, 102, 0, 0.4);
+  stroke-width: 1.5;
+}
+
+/* Feature card icon wrapper */
+.icon-wrapper {
+  @apply w-12 h-12 rounded-xl flex items-center justify-center;
+  background: linear-gradient(135deg, rgba(245, 102, 0, 0.1), rgba(249, 115, 22, 0.15));
+}
+
+/* Journey connector line */
+.journey-connector {
+  background: linear-gradient(90deg, #F56600, #EA580C);
+}
+
+/* Ecosystem connection lines */
+.eco-line {
+  stroke: rgba(245, 102, 0, 0.3);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+/* Text selection */
+::selection {
+  background: rgba(245, 102, 0, 0.2);
+  color: #4A2414;
+}
