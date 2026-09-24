@@ -304,20 +304,46 @@ export default function StudentDashboard({ activeTab = 'dashboard', onSelectTab 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 shrink-0">
             {/* Hero Banner (8 cols / ~68%) */}
             <div
-              onClick={() => handleTabChange('search-courses')}
-              className="lg:col-span-8 rounded-2xl relative overflow-hidden min-h-[190px] sm:min-h-[220px] lg:min-h-[230px] border border-[#F3DEC9] shadow-2xs cursor-pointer group transition-transform hover:scale-[1.003]"
+              className="lg:col-span-8 rounded-2xl relative overflow-hidden flex flex-col justify-between border border-[#E8D4C2] shadow-2xs bg-[#F2E8DD]"
               style={{
-                backgroundImage: `url('/student-hero-banner.png')`,
-                backgroundSize: '100% 100%',
-                backgroundPosition: 'center',
+                backgroundImage: `url('/student-hero-art.png')`,
+                backgroundSize: 'auto 100%',
+                backgroundPosition: 'right center',
                 backgroundRepeat: 'no-repeat',
-                backgroundColor: '#FFF6ED',
+                backgroundColor: '#F2E8DD',
+                minHeight: '225px',
               }}
-              title={isMarathi ? 'अभ्यासक्रम शोधा' : 'Explore Courses'}
             >
-              <span className="sr-only">
-                {isMarathi ? 'तुमच्या कौशल्यातून सक्षम महाराष्ट्र घडवा. शिका • विकसित व्हा • नोकरी मिळवा' : 'Through Your Skills, Build an Empowered Maharashtra. Learn • Develop • Get Employed'}
-              </span>
+              {/* Soft gradient wash to ensure smooth blending with typography */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#F2E8DD] via-[#F2E8DD]/90 to-transparent w-full md:w-[60%] pointer-events-none" />
+
+              <div className="relative z-10 max-w-md p-6 sm:p-7 space-y-2 flex-1 flex flex-col justify-center">
+                <h2 className="text-xl sm:text-2xl lg:text-[26px] font-black text-[#261810] leading-tight">
+                  {isMarathi ? (
+                    <>
+                      तुमच्या कौशल्यातून <br />
+                      <span className="text-[#C84605]">सक्षम महाराष्ट्र घडवा.</span>
+                    </>
+                  ) : (
+                    <>
+                      Through Your Skills, <br />
+                      <span className="text-[#C84605]">Build an Empowered Maharashtra.</span>
+                    </>
+                  )}
+                </h2>
+                <p className="text-xs sm:text-sm font-semibold text-slate-700">
+                  {isMarathi ? 'शिका • विकसित व्हा • नोकरी मिळवा' : 'Learn • Develop • Get Employed'}
+                </p>
+                <div className="pt-2">
+                  <button
+                    onClick={() => handleTabChange('search-courses')}
+                    className="px-5 py-2.5 rounded-lg bg-[#D34005] hover:bg-[#B83200] text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <span>{isMarathi ? 'अभ्यासक्रम शोधा' : 'Explore Courses'}</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* "माझी प्रगती" (My Progress) Card (4 cols / ~32%) */}
