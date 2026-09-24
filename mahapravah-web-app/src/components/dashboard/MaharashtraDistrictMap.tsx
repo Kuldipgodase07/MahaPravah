@@ -21,163 +21,153 @@ const districtData: Record<string, DistrictStat> = {
     name: 'Pune District',
     nameMr: 'पुणे जिल्हा',
     trainees: '1,42,400',
-    traineesMr: '१,४२,४००',
+    traineesMr: '1,42,400',
     employmentRate: '74.2%',
-    employmentRateMr: '७४.२%',
+    employmentRateMr: '74.2%',
     retentionRate: '79.1%',
-    retentionRateMr: '७९.१%',
+    retentionRateMr: '79.1%',
     wageGrowth: '+21.4%',
-    wageGrowthMr: '+२१.४%',
+    wageGrowthMr: '+21.4%',
     rateVal: 74.2,
   },
   Mumbai: {
     name: 'Mumbai Suburban',
     nameMr: 'मुंबई उपनगर',
-    trainees: '1,88,200',
-    traineesMr: '१,८८,२००',
-    employmentRate: '82.5%',
-    employmentRateMr: '८२.५%',
-    retentionRate: '83.4%',
-    retentionRateMr: '८३.४%',
+    trainees: '1,86,500',
+    traineesMr: '1,86,500',
+    employmentRate: '78.5%',
+    employmentRateMr: '78.5%',
+    retentionRate: '82.4%',
+    retentionRateMr: '82.4%',
     wageGrowth: '+24.1%',
-    wageGrowthMr: '+२४.१%',
-    rateVal: 82.5,
-  },
-  Thane: {
-    name: 'Thane District',
-    nameMr: 'ठाणे जिल्हा',
-    trainees: '98,600',
-    traineesMr: '९८,६००',
-    employmentRate: '71.0%',
-    employmentRateMr: '७१.०%',
-    retentionRate: '75.3%',
-    retentionRateMr: '७५.३%',
-    wageGrowth: '+19.8%',
-    wageGrowthMr: '+१९.८%',
-    rateVal: 71.0,
+    wageGrowthMr: '+24.1%',
+    rateVal: 78.5,
   },
   Nagpur: {
     name: 'Nagpur District',
     nameMr: 'नागपूर जिल्हा',
-    trainees: '86,400',
-    traineesMr: '८६,४००',
-    employmentRate: '68.6%',
-    employmentRateMr: '६८.६%',
-    retentionRate: '72.0%',
-    retentionRateMr: '७२.०%',
-    wageGrowth: '+17.5%',
-    wageGrowthMr: '+१७.५%',
-    rateVal: 68.6,
+    trainees: '94,200',
+    traineesMr: '94,200',
+    employmentRate: '68.1%',
+    employmentRateMr: '68.1%',
+    retentionRate: '71.5%',
+    retentionRateMr: '71.5%',
+    wageGrowth: '+16.8%',
+    wageGrowthMr: '+16.8%',
+    rateVal: 68.1,
   },
   Nashik: {
     name: 'Nashik District',
     nameMr: 'नाशिक जिल्हा',
-    trainees: '74,200',
-    traineesMr: '७४,२००',
-    employmentRate: '64.8%',
-    employmentRateMr: '६४.८%',
-    retentionRate: '68.5%',
-    retentionRateMr: '६८.५%',
-    wageGrowth: '+16.2%',
-    wageGrowthMr: '+१६.२%',
-    rateVal: 64.8,
+    trainees: '88,600',
+    traineesMr: '88,600',
+    employmentRate: '65.4%',
+    employmentRateMr: '65.4%',
+    retentionRate: '69.8%',
+    retentionRateMr: '69.8%',
+    wageGrowth: '+15.2%',
+    wageGrowthMr: '+15.2%',
+    rateVal: 65.4,
+  },
+  Aurangabad: {
+    name: 'Chhatrapati Sambhajinagar',
+    nameMr: 'छत्रपती संभाजीनगर',
+    trainees: '76,100',
+    traineesMr: '76,100',
+    employmentRate: '62.8%',
+    employmentRateMr: '62.8%',
+    retentionRate: '66.4%',
+    retentionRateMr: '66.4%',
+    wageGrowth: '+14.1%',
+    wageGrowthMr: '+14.1%',
+    rateVal: 62.8,
   },
 };
 
 export default function MaharashtraDistrictMap() {
   const { isMarathi } = useLanguage();
-  const [selectedId] = useState<string>('Pune');
+  const [selectedDistrictKey] = useState<string>('Pune');
 
-  // Get data for selected district
-  const activeStat = (() => {
-    if (districtData[selectedId]) return districtData[selectedId];
-    return districtData['Pune'];
-  })();
+  const selectedData = districtData[selectedDistrictKey] || districtData.Pune;
 
   return (
-    <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-[#E8D4C2] shadow-2xs flex flex-col select-none relative h-full min-h-0 overflow-hidden">
-
-      {/* Card Header */}
-      <div className="flex items-start justify-between gap-2 mb-1 shrink-0">
+    <div className="bg-white/95 backdrop-blur-xs rounded-xl p-4 border border-[#DFC7B2]/70 shadow-2xs flex flex-col justify-between select-none">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between gap-2 mb-3">
         <div>
-          <h2 className="text-[13px] sm:text-[14px] font-bold text-[#8C3310] tracking-tight leading-tight">
+          <h2 className="text-base font-bold text-slate-900 tracking-tight">
             {isMarathi ? 'महाराष्ट्र जिल्हा आढावा' : 'Maharashtra District Overview'}
           </h2>
-          <span className="text-[10.5px] text-[#64748B] font-normal block mt-0.5 leading-none">
+          <p className="text-xs text-slate-500 mt-0.5">
             {isMarathi ? 'रोजगार दर (%)' : 'Employment Rate (%)'}
-          </span>
+          </p>
         </div>
-        <button className="flex items-center gap-1 h-[24px] px-2 bg-white border border-[#E2E8F0] rounded-md text-[10.5px] font-medium text-[#334155] shadow-2xs hover:bg-[#F8FAFC] transition-colors cursor-pointer whitespace-nowrap shrink-0">
+
+        <button className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors">
           <span>{isMarathi ? 'रोजगार दर' : 'Employment Rate'}</span>
-          <ChevronDown size={11} className="text-[#64748B]" />
+          <ChevronDown size={12} className="text-slate-400" />
         </button>
       </div>
 
-      {/* Map area with overlaid info card - relative container */}
-      <div className="relative flex-1 min-h-0 w-full overflow-hidden">
-
-        {/* Maharashtra District Map Image - aligned top */}
-        <div className="absolute inset-0 flex items-start justify-center pt-0 pointer-events-none">
+      {/* Map & District Info Split */}
+      <div className="grid grid-cols-12 gap-3 items-center py-2">
+        {/* Left Map Image Vector representation */}
+        <div className="col-span-7 flex flex-col items-center justify-center relative min-h-[190px]">
           <img
-            src="/maharashtra-district-map.png"
-            alt="Maharashtra District Map"
-            className="w-full h-full max-h-[220px] object-contain object-top drop-shadow-xs select-none"
+            src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Maharashtra_locator_map.svg"
+            alt="Maharashtra Map"
+            className="w-full h-44 object-contain filter drop-shadow-xs"
+            onError={(e) => {
+              (e.currentTarget as HTMLElement).style.display = 'none';
+            }}
           />
-        </div>
 
-        {/* Legend - positioned in bottom center gap without white container */}
-        <div className="absolute left-[30%] sm:left-[33%] bottom-0.5 z-10 pointer-events-none">
-          <div className="flex flex-col gap-0.5 text-[8.5px] font-medium text-[#64748B]">
-            {[
-              { color: '#5C1D06', label: '≥ 80%' },
-              { color: '#9E3808', label: '60% – 80%' },
-              { color: '#DF6B20', label: '40% – 60%' },
-              { color: '#F3AF6B', label: '20% – 40%' },
-              { color: '#FDE0BD', label: '< 20%' },
-            ].map(({ color, label }) => (
-              <div key={label} className="flex items-center gap-1">
-                <span
-                  className="w-2 h-2 rounded-[2px] shrink-0"
-                  style={{ backgroundColor: color }}
-                />
-                <span className="whitespace-nowrap leading-none">{label}</span>
-              </div>
-            ))}
+          {/* Map Legend */}
+          <div className="flex items-center gap-3 text-[10px] text-slate-500 mt-2">
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded bg-[#9A2A06]" />
+              <span>≥ 70%</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded bg-[#C0392B]" />
+              <span>60% - 70%</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded bg-[#E67E22]" />
+              <span>40% - 60%</span>
+            </div>
           </div>
         </div>
 
-        {/* District Stats Card - positioned in bottom right cove */}
-        <div className="absolute right-0 bottom-0 w-[140px] sm:w-[148px] bg-white/95 backdrop-blur-xs rounded-lg border border-slate-200 shadow-sm z-20 p-2">
-          {/* District name + link */}
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[11px] font-bold text-slate-900 leading-tight">
-              {isMarathi ? activeStat.nameMr : activeStat.name}
-            </span>
-            <a
-              href="#district"
-              className="text-[9.5px] font-semibold text-[#C2410C] hover:underline shrink-0 ml-1 whitespace-nowrap"
-            >
+        {/* Right District Info Box */}
+        <div className="col-span-5 bg-slate-50/70 p-3 rounded-xl border border-slate-200/80 space-y-2">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+            <span className="font-bold text-xs text-slate-900">{isMarathi ? selectedData.nameMr : selectedData.name}</span>
+            <button className="text-[11px] font-semibold text-[#C0392B] hover:underline flex items-center gap-0.5">
               {isMarathi ? 'तपशील →' : 'Details →'}
-            </a>
+            </button>
           </div>
 
-          {/* Stats */}
-          <div className="space-y-1 text-[9.5px]">
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500 font-medium">{isMarathi ? 'प्रशिक्षणार्थी' : 'Trainees'}</span>
-              <span className="font-bold text-slate-900">{isMarathi ? activeStat.traineesMr : activeStat.trainees}</span>
+          <div className="space-y-1.5 text-xs">
+            <div className="flex justify-between">
+              <span className="text-slate-500">{isMarathi ? 'प्रशिक्षणार्थी' : 'Trainees'}</span>
+              <span className="font-bold text-slate-900">{isMarathi ? selectedData.traineesMr : selectedData.trainees}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500 font-medium">{isMarathi ? 'रोजगार दर' : 'Employment Rate'}</span>
-              <span className="font-bold text-slate-900">{isMarathi ? activeStat.employmentRateMr : activeStat.employmentRate}</span>
+
+            <div className="flex justify-between">
+              <span className="text-slate-500">{isMarathi ? 'रोजगार दर' : 'Employment Rate'}</span>
+              <span className="font-bold text-slate-900">{isMarathi ? selectedData.employmentRateMr : selectedData.employmentRate}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500 font-medium">{isMarathi ? 'टिकाव दर' : 'Retention Rate'}</span>
-              <span className="font-bold text-slate-900">{isMarathi ? activeStat.retentionRateMr : activeStat.retentionRate}</span>
+
+            <div className="flex justify-between">
+              <span className="text-slate-500">{isMarathi ? 'टिकून दर' : 'Retention Rate'}</span>
+              <span className="font-bold text-slate-900">{isMarathi ? selectedData.retentionRateMr : selectedData.retentionRate}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500 font-medium">{isMarathi ? 'वेतन वाढ' : 'Median Wage'}</span>
-              <span className="font-bold text-slate-900">{isMarathi ? activeStat.wageGrowthMr : activeStat.wageGrowth}</span>
+
+            <div className="flex justify-between">
+              <span className="text-slate-500">{isMarathi ? 'वेतन वाढ' : 'Wage Growth'}</span>
+              <span className="font-bold text-emerald-600">{isMarathi ? selectedData.wageGrowthMr : selectedData.wageGrowth}</span>
             </div>
           </div>
         </div>

@@ -99,23 +99,19 @@ export default function DashboardShell({
               className={`w-full flex items-center transition-all duration-200 text-left rounded-xl cursor-pointer ${
                 collapsed
                   ? 'justify-center p-2'
-                  : 'gap-2.5 px-3 py-1.5 sm:py-2 text-[12px] xl:text-[12.5px] font-medium'
+                  : 'gap-2.5 px-3 py-1.5 sm:py-2 text-[12.5px] xl:text-[13px] font-medium'
               } ${
                 isActive
-                  ? role === 'student'
-                    ? 'bg-[#FFF0E6] text-[#E35314] font-bold shadow-2xs border border-[#FCDCC9]'
-                    : 'bg-[#7B2400] text-white font-bold shadow-xs'
-                  : 'text-[#475569] hover:bg-[#FBEFDF]/80 hover:text-[#7B2400]'
+                  ? 'bg-[#7B2400] text-white font-bold shadow-xs'
+                  : 'text-[#3B281C] hover:bg-[#FBEFDF]/80 hover:text-[#7B2400]'
               }`}
             >
               <Icon
                 size={16}
                 className={
                   isActive
-                    ? role === 'student'
-                      ? 'text-[#E35314] shrink-0'
-                      : 'text-white shrink-0'
-                    : 'text-[#64748B] shrink-0'
+                    ? 'text-white shrink-0'
+                    : 'text-[#614535] shrink-0'
                 }
               />
               {!collapsed && <span className="truncate">{displayLabel}</span>}

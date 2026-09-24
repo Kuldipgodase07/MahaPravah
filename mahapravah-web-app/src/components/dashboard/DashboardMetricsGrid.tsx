@@ -1,4 +1,5 @@
-import { Users, Briefcase, ShieldCheck, BarChart3, Coins, Database, TrendingUp } from 'lucide-react';
+import React from 'react';
+import { Users, Briefcase, ShieldCheck, BarChart3, Coins, Database } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 interface MetricItem {
@@ -20,9 +21,9 @@ const metricsData: MetricItem[] = [
     label: 'Total Trainees',
     labelMr: 'एकूण प्रशिक्षणार्थी',
     value: '12.4 Lakh',
-    valueMr: '१२.४ लाख',
-    trend: '12%',
-    trendMr: '१२%',
+    valueMr: '12.4 लाख',
+    trend: '↑ 12%',
+    trendMr: '↑ 12%',
     subtext: 'vs last year',
     subtextMr: 'मागील वर्षाच्या तुलनेत',
     icon: Users,
@@ -32,9 +33,9 @@ const metricsData: MetricItem[] = [
     label: 'Employment Rate',
     labelMr: 'रोजगार दर',
     value: '68.4%',
-    valueMr: '६८.४%',
-    trend: '6.2%',
-    trendMr: '६.२%',
+    valueMr: '68.4%',
+    trend: '↑ 6.2%',
+    trendMr: '↑ 6.2%',
     subtext: 'vs last year',
     subtextMr: 'मागील वर्षाच्या तुलनेत',
     icon: Briefcase,
@@ -44,9 +45,9 @@ const metricsData: MetricItem[] = [
     label: 'Verified Employment',
     labelMr: 'सत्यापित रोजगार',
     value: '54.8%',
-    valueMr: '५४.८%',
-    trend: '8.1%',
-    trendMr: '८.१%',
+    valueMr: '54.8%',
+    trend: '↑ 8.1%',
+    trendMr: '↑ 8.1%',
     subtext: 'vs last year',
     subtextMr: 'मागील वर्षाच्या तुलनेत',
     icon: ShieldCheck,
@@ -54,11 +55,11 @@ const metricsData: MetricItem[] = [
   {
     id: 'retention',
     label: '12-Month Retention',
-    labelMr: '१२-महिने टिकून राहणे',
+    labelMr: '12-महिने टिकून राहणे',
     value: '72.1%',
-    valueMr: '७२.१%',
-    trend: '5.6%',
-    trendMr: '५.६%',
+    valueMr: '72.1%',
+    trend: '↑ 5.6%',
+    trendMr: '↑ 5.6%',
     subtext: 'vs last year',
     subtextMr: 'मागील वर्षाच्या तुलनेत',
     icon: BarChart3,
@@ -68,9 +69,9 @@ const metricsData: MetricItem[] = [
     label: 'Median Wage Growth',
     labelMr: 'सरासरी वेतन वाढ',
     value: '+18.6%',
-    valueMr: '+१८.६%',
-    trend: '4.3%',
-    trendMr: '४.३%',
+    valueMr: '+18.6%',
+    trend: '↑ 4.3%',
+    trendMr: '↑ 4.3%',
     subtext: 'vs last year',
     subtextMr: 'मागील वर्षाच्या तुलनेत',
     icon: Coins,
@@ -80,11 +81,11 @@ const metricsData: MetricItem[] = [
     label: 'Outcome Data Coverage',
     labelMr: 'डेटा व्याप्ती',
     value: '81.4%',
-    valueMr: '८१.४%',
-    trend: '9.3%',
-    trendMr: '९.३%',
+    valueMr: '81.4%',
+    trend: '↑ 9.3%',
+    trendMr: '↑ 9.3%',
     subtext: 'vs 2024',
-    subtextMr: '२०२४ च्या तुलनेत',
+    subtextMr: '2024 च्या तुलनेत',
     icon: Database,
   },
 ];
@@ -92,61 +93,39 @@ const metricsData: MetricItem[] = [
 export default function DashboardMetricsGrid() {
   const { isMarathi } = useLanguage();
 
-  const renderCard = (item: MetricItem) => {
-    const Icon = item.icon;
-
-    return (
-      <div
-        key={item.id}
-        className="bg-white rounded-xl p-2 border border-[#E8D4C2] shadow-2xs flex flex-col justify-between h-[60px] sm:h-[62px] hover:shadow-xs transition-shadow min-w-0"
-      >
-        {/* Top: Circular Icon Badge + Label */}
-        <div className="flex items-center gap-1.5 min-w-0">
-          <div className="w-6 h-6 rounded-full bg-[#FFF0E6] text-[#D95B00] flex items-center justify-center shrink-0">
-            <Icon size={13} strokeWidth={2.2} />
-          </div>
-          <span className="text-[11px] font-medium text-slate-600 leading-tight truncate">
-            {isMarathi ? item.labelMr : item.label}
-          </span>
-        </div>
-
-        {/* Bottom: Left Trend + Right Value */}
-        <div className="flex items-end justify-between gap-1 min-w-0">
-          <div className="flex flex-col leading-none shrink-0">
-            <span className="inline-flex items-center text-[10px] font-bold text-emerald-600">
-              <TrendingUp size={10} className="mr-0.5 shrink-0" /> {isMarathi ? item.trendMr : item.trend}
-            </span>
-            <span className="text-[9px] text-slate-400 font-normal mt-0.5 whitespace-nowrap">
-              {isMarathi ? item.subtextMr : item.subtext}
-            </span>
-          </div>
-          <span className="text-[16px] xl:text-[18px] font-bold text-slate-900 whitespace-nowrap tracking-tight leading-none text-right shrink-0">
-            {isMarathi ? item.valueMr : item.value}
-          </span>
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-1.5 select-none shrink-0">
-      {/* ── Pair 1: Total Trainees & Employment Rate ── */}
-      <div className="grid grid-cols-2 gap-2">
-        {renderCard(metricsData[0])}
-        {renderCard(metricsData[1])}
-      </div>
-
-      {/* ── Pair 2: Verified Employment & 12-Month Retention ── */}
-      <div className="grid grid-cols-2 gap-2">
-        {renderCard(metricsData[2])}
-        {renderCard(metricsData[3])}
-      </div>
-
-      {/* ── Pair 3: Median Wage Growth & Outcome Data Coverage ── */}
-      <div className="grid grid-cols-2 gap-2">
-        {renderCard(metricsData[4])}
-        {renderCard(metricsData[5])}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 shrink-0">
+      {metricsData.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div
+            key={item.id}
+            className="bg-white/95 backdrop-blur-xs rounded-xl p-3.5 border border-[#DFC7B2]/70 shadow-2xs flex flex-col justify-between hover:shadow-xs transition-shadow min-w-0"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-medium text-slate-500 line-clamp-1">
+                {isMarathi ? item.labelMr : item.label}
+              </span>
+              <div className="p-1.5 rounded-lg bg-orange-100/70 text-[#C0392B]">
+                <Icon size={16} />
+              </div>
+            </div>
+            <div>
+              <div className="text-xl font-bold text-slate-900 tracking-tight">
+                {isMarathi ? item.valueMr : item.value}
+              </div>
+              <div className="flex items-center gap-1 mt-1 text-xs">
+                <span className="text-emerald-600 font-semibold">
+                  {isMarathi ? item.trendMr : item.trend}
+                </span>
+                <span className="text-slate-400 text-[10px]">
+                  {isMarathi ? item.subtextMr : item.subtext}
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

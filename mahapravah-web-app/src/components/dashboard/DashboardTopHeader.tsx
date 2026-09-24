@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { Search, Bell, ChevronDown, Globe, Check, LogOut } from 'lucide-react';
+import { Search, Bell, ChevronDown, Globe, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 import { useRole } from '../../context/RoleContext';
+import type { UserRole } from '../../context/RoleContext';
 
 interface DashboardTopHeaderProps {
   onNavigateHome?: () => void;
@@ -10,7 +11,7 @@ interface DashboardTopHeaderProps {
 
 export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeaderProps) {
   const { lang, setLang, isMarathi } = useLanguage();
-  const { currentRole, currentRoleMeta, setRole, allRoles } = useRole();
+  const { currentRole, setRole, currentRoleMeta, allRoles } = useRole();
   const [searchQuery, setSearchQuery] = useState('');
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
@@ -30,6 +31,11 @@ export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeade
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleSelectRole = (newRole: UserRole) => {
+    setRole(newRole);
+    setRoleDropdownOpen(false);
+  };
 
   return (
     <header 
@@ -69,7 +75,7 @@ export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeade
           </button>
         </div>
 
-        {/* â”€â”€ Right Actions: Search, Language, Bell & Role Switcher â”€â”€ */}
+        {/* ── Right Actions: Search, Language, Bell & Profile Lockup (Sitting on the Bottom Edge) ── */}
         <div className="absolute right-3 sm:right-4 lg:right-5 bottom-0 translate-y-1/2 flex items-center gap-1.5 sm:gap-2 z-40">
           {/* Search Input Box */}
           <div className="relative w-[150px] sm:w-[200px] md:w-[240px]">
@@ -86,7 +92,7 @@ export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeade
             />
           </div>
 
-          {/* â”€â”€ Language Switcher Dropdown â”€â”€ */}
+          {/* ── Language Switcher Dropdown (Globe Icon) ── */}
           <div ref={langRef} className="relative">
             <button
               onClick={() => setLangDropdownOpen(!langDropdownOpen)}
@@ -156,29 +162,28 @@ export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeade
             </span>
           </div>
 
-          {/* â”€â”€ Role Switcher Profile Pill â”€â”€ */}
+          {/* ── Profile Pill + Role Switcher Dropdown ── */}
           <div ref={roleRef} className="relative">
             <button
               onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
               className="flex items-center gap-1.5 sm:gap-2 h-[30px] sm:h-[32px] px-2 sm:px-2.5 bg-white border border-[#DFCEBD] rounded-lg shadow-2xs hover:shadow-xs hover:bg-[#FAF7F2] transition-all cursor-pointer shrink-0"
-              aria-label="Switch role"
               title="Switch Dashboard Role"
-              id="role-switcher-btn"
+              aria-label="Switch role"
             >
               <img
-                src={currentRoleMeta.avatar}
-                alt={currentRoleMeta.userNameEn}
+                src={currentRoleMeta?.avatar || '/dr-deshmukh-avatar.png'}
+                alt={currentRoleMeta?.userNameEn || 'Dr. A. Deshmukh'}
                 className="w-5 h-5 rounded-full object-cover border border-[#DFCEBD] shrink-0"
                 onError={(e) => {
                   (e.currentTarget as HTMLElement).style.display = 'none';
                 }}
               />
               <div className="flex flex-col text-left">
-                <span className="text-[11px] font-bold text-[#1E1008] leading-tight truncate max-w-[90px] sm:max-w-[120px]">
-                  {isMarathi ? currentRoleMeta.userNameMr : currentRoleMeta.userNameEn}
+                <span className="text-[11px] font-bold text-[#1E1008] leading-tight truncate max-w-[85px] sm:max-w-[120px]">
+                  {isMarathi ? currentRoleMeta?.userNameMr : currentRoleMeta?.userNameEn}
                 </span>
                 <span className="text-[8.5px] font-medium text-[#7A5B4C] leading-none hidden sm:block truncate max-w-[120px]">
-                  {isMarathi ? currentRoleMeta.labelMr : currentRoleMeta.labelEn}
+                  {isMarathi ? currentRoleMeta?.labelMr : currentRoleMeta?.labelEn}
                 </span>
               </div>
               <ChevronDown
@@ -196,7 +201,6 @@ export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeade
                   exit={{ opacity: 0, y: 6, scale: 0.97 }}
                   transition={{ duration: 0.18, ease: 'easeOut' }}
                   className="absolute right-0 mt-1.5 w-[240px] bg-white rounded-xl shadow-2xl border border-[#EAE3D6] overflow-hidden z-50"
-                  id="role-switcher-dropdown"
                 >
                   {/* Dropdown Header */}
                   <div className="px-3 py-2 bg-[#FAF7F2] border-b border-[#EAE3D6]">
@@ -210,83 +214,40 @@ export default function DashboardTopHeader({ onNavigateHome }: DashboardTopHeade
 
                   {/* Role List */}
                   <div className="py-1 max-h-[320px] overflow-y-auto">
-                    {allRoles.map((role) => {
-                      const isActive = currentRole === role.id;
+                    {allRoles.map((r) => {
+                      const isActive = currentRole === r.id;
                       return (
                         <button
-                          key={role.id}
-                          onClick={() => {
-                            setRole(role.id);
-                            setRoleDropdownOpen(false);
-                          }}
+                          key={r.id}
+                          onClick={() => handleSelectRole(r.id)}
                           className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors cursor-pointer ${
                             isActive
-                              ? 'bg-[#FFF3E8] text-[#8C3310]'
-                              : 'hover:bg-stone-50 text-stone-800'
+                              ? 'bg-[#FFEEDE] text-[#7B2400] font-semibold'
+                              : 'text-stone-700 hover:bg-[#FAF7F2]'
                           }`}
                         >
-                          {/* Avatar */}
-                          <div className="relative shrink-0">
-                            <img
-                              src={role.avatar}
-                              alt={role.userNameEn}
-                              className="w-7 h-7 rounded-full object-cover border border-[#DFCEBD]"
-                              onError={(e) => {
-                                const el = e.currentTarget as HTMLImageElement;
-                                el.style.display = 'none';
-                                const next = el.nextElementSibling as HTMLElement | null;
-                                if (next) next.style.display = 'flex';
-                              }}
-                            />
-                            {/* Fallback initials circle */}
-                            <div
-                              className="w-7 h-7 rounded-full bg-[#F56600]/20 border border-[#DFCEBD] items-center justify-center text-[#8C3310] text-[9px] font-bold hidden"
-                              aria-hidden="true"
-                            >
-                              {role.userNameEn.charAt(0)}
-                            </div>
-                          </div>
-
-                          {/* Name & Role Title */}
+                          <img
+                            src={r.avatar}
+                            alt={r.userNameEn}
+                            className="w-6 h-6 rounded-full object-cover border border-[#DFCEBD] shrink-0"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLElement).style.display = 'none';
+                            }}
+                          />
                           <div className="flex-1 min-w-0">
-                            <p className={`text-[11px] font-bold leading-tight truncate ${isActive ? 'text-[#5C1D08]' : 'text-stone-800'}`}>
-                              {isMarathi ? role.userNameMr : role.userNameEn}
+                            <p className="text-[11px] font-bold truncate leading-tight text-[#1E1008]">
+                              {isMarathi ? r.userNameMr : r.userNameEn}
                             </p>
-                            <p className={`text-[9px] leading-tight truncate mt-0.5 ${isActive ? 'text-[#8C3310]' : 'text-stone-500'}`}>
-                              {isMarathi ? role.labelMr : role.labelEn}
+                            <p className="text-[9px] text-stone-500 truncate leading-tight">
+                              {isMarathi ? r.labelMr : r.labelEn}
                             </p>
                           </div>
-
-                          {/* Active indicator */}
                           {isActive && (
-                            <Check size={13} className="text-[#F56600] shrink-0" strokeWidth={2.5} />
+                            <Check size={13} className="text-[#F56600] shrink-0" />
                           )}
                         </button>
                       );
                     })}
-                  </div>
-
-                          {isMarathi ? 'बाहेर पडा' : 'Sign Out'}
-                  <div className="border-t border-[#EAE3D6]">
-                    <button
-                      onClick={() => {
-                        setRoleDropdownOpen(false);
-                        window.location.hash = '';
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-left hover:bg-red-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="w-7 h-7 rounded-full bg-red-50 border border-red-100 flex items-center justify-center shrink-0 group-hover:bg-red-100 transition-colors">
-                        <LogOut size={12} className="text-red-500" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-[11px] font-bold text-red-600 leading-tight">
-                          {isMarathi ? 'बाहेर पडा' : 'Sign Out'}
-                        </p>
-                        <p className="text-[9px] text-red-400 leading-tight mt-0.5">
-                          {isMarathi ? 'लॉगिन पृष्ठावर परत जा' : 'Return to login page'}
-                        </p>
-                      </div>
-                    </button>
                   </div>
                 </motion.div>
               )}

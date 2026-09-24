@@ -7,6 +7,18 @@ import RoleDashboardDispatcher from './pages/RoleDashboardDispatcher';
 import { LanguageProvider } from './context/LanguageContext';
 import { RoleProvider } from './context/RoleContext';
 
+const DASHBOARD_HASHES = [
+  '#dashboard',
+  '#officer-dashboard',
+  '#student-dashboard',
+  '#provider-dashboard',
+  '#employer-dashboard',
+  '#district-dashboard',
+  '#college-dashboard',
+  '#policy-dashboard',
+  '#admin-dashboard',
+];
+
 export default function App() {
   const [splashDone, setSplashDone] = useState(false);
   const [currentHash, setCurrentHash] = useState(() => window.location.hash);
@@ -29,9 +41,7 @@ export default function App() {
   }, []);
 
   const isLoginPage = currentHash === '#login';
-  const isDashboardPage =
-    currentHash === '#dashboard' ||
-    currentHash.endsWith('-dashboard');
+  const isDashboardPage = DASHBOARD_HASHES.includes(currentHash);
 
   return (
     <LanguageProvider>
@@ -54,3 +64,4 @@ export default function App() {
     </LanguageProvider>
   );
 }
+
