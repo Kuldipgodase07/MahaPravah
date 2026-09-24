@@ -11,9 +11,14 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 
-export default function EmployerDashboard() {
+interface EmployerDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function EmployerDashboard({ activeTab = 'dashboard', onSelectTab }: EmployerDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'matching' | 'jobs' | 'pipeline' | 'location'>('overview');
+  const currentTab = (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') ? 'overview' : activeTab;
   const [showCreateJobModal, setShowCreateJobModal] = useState(false);
 
   const kpis = [
@@ -211,28 +216,6 @@ export default function EmployerDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Pills ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'Talent Acquisition Overview', mr: 'भरती आढावा' },
-          { id: 'matching', en: 'AI Talent Matcher', mr: 'एआय उमेदवार जुळणी' },
-          { id: 'jobs', en: 'Active Job Postings', mr: 'सक्रिय नोकरी जाहिराती' },
-          { id: 'pipeline', en: 'Recruitment Pipeline', mr: 'भरती प्रक्रिया फनेल' },
-          { id: 'location', en: 'District Talent Pool Map', mr: 'जिल्हानिहाय मनुष्यबळ नकाशा' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -265,7 +248,7 @@ export default function EmployerDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {currentTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: Top Matched Candidates & AI Radar (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -404,7 +387,7 @@ export default function EmployerDashboard() {
                     <div className="flex justify-between text-[9.5px] text-slate-400 pt-0.5 border-t border-stone-100">
                       <span>{j.applicants} Applicants ({j.matched} Pre-Matched)</span>
                       <button
-                        onClick={() => setSelectedSubTab('matching')}
+                        onClick={() => onSelectTab?.('matching')}
                         className="text-[#F56600] font-bold hover:underline cursor-pointer"
                       >
                         View Matches →
@@ -443,7 +426,7 @@ export default function EmployerDashboard() {
       )}
 
       {/* SubTab: AI Talent Matching */}
-      {selectedSubTab === 'matching' && (
+      {currentTab === 'matching' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -490,7 +473,7 @@ export default function EmployerDashboard() {
       )}
 
       {/* SubTab: Jobs */}
-      {selectedSubTab === 'jobs' && (
+      {currentTab === 'jobs' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -526,7 +509,7 @@ export default function EmployerDashboard() {
       )}
 
       {/* SubTab: Pipeline */}
-      {selectedSubTab === 'pipeline' && (
+      {currentTab === 'pipeline' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'संपूर्ण भरती फनेल ट्रॅकर' : 'End-to-End Enterprise Candidate Pipeline'}
@@ -538,7 +521,7 @@ export default function EmployerDashboard() {
       )}
 
       {/* SubTab: Location Pool */}
-      {selectedSubTab === 'location' && (
+      {currentTab === 'location' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'जिल्हानिहाय कुशल मनुष्यबळ उपलब्धता' : 'District-Wise Skilled Talent Pool Concentration'}

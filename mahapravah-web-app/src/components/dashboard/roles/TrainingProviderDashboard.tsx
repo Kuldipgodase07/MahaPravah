@@ -15,11 +15,32 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 
-export default function TrainingProviderDashboard() {
+interface TrainingProviderDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function TrainingProviderDashboard({ activeTab = 'dashboard', onSelectTab }: TrainingProviderDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'courses' | 'learners' | 'outcomes' | 'scorecard'>('overview');
   const [learnerSearch, setLearnerSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  // Map sidebar activeTab to current view
+  const currentTab = (() => {
+    if (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') return 'overview';
+    if (activeTab === 'courses') return 'courses';
+    if (activeTab === 'learners') return 'learners';
+    if (activeTab === 'outcomes') return 'outcomes';
+    if (activeTab === 'scorecard') return 'scorecard';
+    if (activeTab === 'alerts') return 'alerts';
+    return activeTab;
+  })();
+
+  const handleTabChange = (target: string) => {
+    if (onSelectTab) {
+      onSelectTab(target);
+    }
+  };
 
   const kpis = [
     {
@@ -216,28 +237,6 @@ export default function TrainingProviderDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Tabs ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'Operations Overview', mr: 'कार्यपद्धती आढावा' },
-          { id: 'courses', en: 'Course Catalogue & Batches', mr: 'अभ्यासक्रम व तुकड्या' },
-          { id: 'learners', en: 'Learner Management', mr: 'प्रशिक्षणार्थी व्यवस्थापन' },
-          { id: 'outcomes', en: 'Outcome Funnel', mr: 'रोजगार निष्पत्ती फनेल' },
-          { id: 'scorecard', en: 'Provider Quality Scorecard', mr: 'संस्था गुणवत्ता गुणपत्रिका' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -270,7 +269,7 @@ export default function TrainingProviderDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {(currentTab === 'overview' || currentTab === 'alerts') && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: Operational Alerts + Outcome Tracking (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -401,7 +400,7 @@ export default function TrainingProviderDashboard() {
                     {isMarathi ? 'चालू तुकड्या (Active Batches)' : 'Active Batch Capacity'}
                   </h3>
                   <button
-                    onClick={() => setSelectedSubTab('courses')}
+                    onClick={() => handleTabChange('courses')}
                     className="text-[10.5px] font-bold text-[#F56600] hover:underline"
                   >
                     View All →
@@ -436,7 +435,7 @@ export default function TrainingProviderDashboard() {
       )}
 
       {/* SubTab: Course Management */}
-      {selectedSubTab === 'courses' && (
+      {currentTab === 'courses' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -476,7 +475,7 @@ export default function TrainingProviderDashboard() {
       )}
 
       {/* SubTab: Learner Management Table */}
-      {selectedSubTab === 'learners' && (
+      {currentTab === 'learners' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 flex flex-col min-h-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -558,7 +557,7 @@ export default function TrainingProviderDashboard() {
       )}
 
       {/* SubTab: Outcomes */}
-      {selectedSubTab === 'outcomes' && (
+      {currentTab === 'outcomes' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'प्रशिक्षण ते रोजगार टिकून राहणे विश्लेषण' : 'Training → Assessment → Placement → Retention Longitudinal Study'}
@@ -572,7 +571,7 @@ export default function TrainingProviderDashboard() {
       )}
 
       {/* SubTab: Scorecard */}
-      {selectedSubTab === 'scorecard' && (
+      {currentTab === 'scorecard' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'अधिकृत संस्था गुणवत्ता मूल्यांकन' : 'Official State Skill Quality Audit Breakdown'}

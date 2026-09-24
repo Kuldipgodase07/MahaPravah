@@ -11,9 +11,14 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 
-export default function AdminDashboard() {
+interface AdminDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function AdminDashboard({ activeTab = 'dashboard', onSelectTab }: AdminDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'users' | 'orgs' | 'health' | 'audit'>('overview');
+  const currentTab = (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') ? 'overview' : activeTab;
   const [userSearch, setUserSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
@@ -201,28 +206,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Pills ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'Platform Overview', mr: 'प्रणाली आढावा' },
-          { id: 'users', en: 'User Management & RBAC', mr: 'वापरकर्ता व भूमिका व्यवस्थापन' },
-          { id: 'orgs', en: 'Organization Approvals', mr: 'संस्था पडताळणी' },
-          { id: 'health', en: 'Service Health & APIs', mr: 'सेवा आरोग्य व एपीआय' },
-          { id: 'audit', en: 'Immutable Audit Log', mr: 'ऑडिट लॉग' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
+
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -255,7 +239,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {currentTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: User Management Table Snapshot & Data Quality (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -266,7 +250,7 @@ export default function AdminDashboard() {
                   {isMarathi ? 'सक्रिय वापरकर्ते व आरबीएसी नियंत्रण' : 'Active Personnel & Role Access Registry'}
                 </h3>
                 <button
-                  onClick={() => setSelectedSubTab('users')}
+                  onClick={() => onSelectTab?.('users')}
                   className="text-[10.5px] font-bold text-[#F56600] hover:underline"
                 >
                   Manage All →
@@ -379,7 +363,7 @@ export default function AdminDashboard() {
               </div>
 
               <button
-                onClick={() => setSelectedSubTab('audit')}
+                onClick={() => onSelectTab?.('audit')}
                 className="w-full mt-2 py-1.5 rounded-lg bg-[#FAF7F2] border border-[#DFCEBD] text-slate-800 text-xs font-bold hover:bg-stone-100 flex items-center justify-center gap-1 cursor-pointer"
               >
                 <span>View Full Immutable Audit Log →</span>
@@ -390,7 +374,7 @@ export default function AdminDashboard() {
       )}
 
       {/* SubTab: Users */}
-      {selectedSubTab === 'users' && (
+      {currentTab === 'users' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 flex flex-col min-h-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -469,7 +453,7 @@ export default function AdminDashboard() {
       )}
 
       {/* SubTab: Orgs */}
-      {selectedSubTab === 'orgs' && (
+      {currentTab === 'orgs' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'संस्था पडताळणी रांग (Verification Queue)' : 'Institutional Accreditation & Corporate Onboarding Queue'}
@@ -481,7 +465,7 @@ export default function AdminDashboard() {
       )}
 
       {/* SubTab: Health */}
-      {selectedSubTab === 'health' && (
+      {currentTab === 'health' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'तपशीलवार प्रणाली व एपीआय कामगिरी' : 'Detailed Microservice Diagnostics & Rate Limiting'}
@@ -502,7 +486,7 @@ export default function AdminDashboard() {
       )}
 
       {/* SubTab: Audit */}
-      {selectedSubTab === 'audit' && (
+      {currentTab === 'audit' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex justify-between items-center">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">

@@ -13,9 +13,14 @@ import {
 import { useLanguage } from '../../../context/LanguageContext';
 import MaharashtraDistrictMap from '../MaharashtraDistrictMap';
 
-export default function PolicyOfficerDashboard() {
+interface PolicyOfficerDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function PolicyOfficerDashboard({ activeTab = 'dashboard', onSelectTab }: PolicyOfficerDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'programs' | 'intelligence' | 'budget' | 'simulator'>('overview');
+  const currentTab = (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') ? 'overview' : activeTab;
 
   // Policy Simulator State
   const [capacityDelta, setCapacityDelta] = useState(25);
@@ -154,28 +159,7 @@ export default function PolicyOfficerDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Pills ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'Executive State Overview', mr: 'राज्यव्यापी आढावा' },
-          { id: 'programs', en: 'Flagship Schemes Performance', mr: 'प्रमुख योजना कामगिरी' },
-          { id: 'intelligence', en: 'AI Policy Intelligence', mr: 'एआय धोरण बुद्धिमत्ता' },
-          { id: 'budget', en: 'Resource & Fiscal Allocation', mr: 'निधी व अर्थसंकल्प वाटप' },
-          { id: 'simulator', en: 'Policy "What-If" Scenario Simulator', mr: 'धोरण परिस्थिती सिम्युलेटर' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
+
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -208,7 +192,7 @@ export default function PolicyOfficerDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {currentTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: Maharashtra State Map & Flagship Schemes (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -298,7 +282,7 @@ export default function PolicyOfficerDashboard() {
               </div>
 
               <button
-                onClick={() => setSelectedSubTab('simulator')}
+                onClick={() => onSelectTab?.('simulator')}
                 className="w-full mt-2 py-1.5 rounded-lg bg-[#F56600] text-white text-xs font-bold hover:bg-[#D94E00] flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Sliders size={13} />
@@ -310,7 +294,7 @@ export default function PolicyOfficerDashboard() {
       )}
 
       {/* SubTab: Programs */}
-      {selectedSubTab === 'programs' && (
+      {currentTab === 'programs' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'महाराष्ट्र राज्य प्रमुख योजना सखोल आढावा' : 'Detailed Flagship Schemes Performance Audit'}
@@ -335,7 +319,7 @@ export default function PolicyOfficerDashboard() {
       )}
 
       {/* SubTab: Policy Scenarios Simulator */}
-      {selectedSubTab === 'simulator' && (
+      {currentTab === 'simulator' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-4">
           <div className="flex items-center justify-between border-b border-stone-200 pb-2">
             <div>
@@ -418,7 +402,7 @@ export default function PolicyOfficerDashboard() {
       )}
 
       {/* SubTab: AI Intelligence */}
-      {selectedSubTab === 'intelligence' && (
+      {currentTab === 'intelligence' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'मंत्रालय एआय पुरावा-आधारित धोरण विश्लेषक' : 'AI-Assisted Macroeconomic Labor Policy Intelligence'}
@@ -432,7 +416,7 @@ export default function PolicyOfficerDashboard() {
       )}
 
       {/* SubTab: Budget */}
-      {selectedSubTab === 'budget' && (
+      {currentTab === 'budget' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'विभागनिहाय अर्थसंकल्प वाटप व खर्च' : 'Division-Wise Skill Budget Allocation & Expenditure'}

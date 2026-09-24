@@ -13,9 +13,14 @@ import {
 import { useLanguage } from '../../../context/LanguageContext';
 import MaharashtraDistrictMap from '../MaharashtraDistrictMap';
 
-export default function DistrictSkillOfficerDashboard() {
+interface DistrictSkillOfficerDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function DistrictSkillOfficerDashboard({ activeTab = 'dashboard', onSelectTab: _onSelectTab }: DistrictSkillOfficerDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'map' | 'comparison' | 'skillgap' | 'interventions'>('overview');
+  const currentTab = (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') ? 'overview' : activeTab;
   const [showInterventionModal, setShowInterventionModal] = useState(false);
 
   const kpis = [
@@ -148,28 +153,6 @@ export default function DistrictSkillOfficerDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Pills ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'District Intelligence Overview', mr: 'जिल्हा बुद्धिमत्ता आढावा' },
-          { id: 'map', en: 'Division & Taluka Drilldown', mr: 'विभाग व तालुका विश्लेषण' },
-          { id: 'comparison', en: 'Historical Performance Comparisons', mr: 'तुलनात्मक कामगिरी' },
-          { id: 'skillgap', en: 'Skill Gap & Interventions', mr: 'कौशल्य तूट व हस्तक्षेप' },
-          { id: 'interventions', en: 'Active Interventions Tracker', mr: 'हस्तक्षेप ट्रॅकर' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -202,7 +185,7 @@ export default function DistrictSkillOfficerDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {currentTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: District Map & Taluka Breakdown (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -305,7 +288,7 @@ export default function DistrictSkillOfficerDashboard() {
       )}
 
       {/* SubTab: Map Drilldown */}
-      {selectedSubTab === 'map' && (
+      {currentTab === 'map' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'महाराष्ट्र → विभाग → जिल्हा → तालुका सखोल विश्लेषण' : 'Maharashtra State → Division → District → Taluka Interactive Drilldown'}
@@ -317,7 +300,7 @@ export default function DistrictSkillOfficerDashboard() {
       )}
 
       {/* SubTab: Comparison */}
-      {selectedSubTab === 'comparison' && (
+      {currentTab === 'comparison' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'मागील वर्षाच्या तुलनेत प्रगती विश्लेषण' : 'Period-over-Period Performance Comparison (FY 2024-25 vs FY 2025-26)'}
@@ -343,7 +326,7 @@ export default function DistrictSkillOfficerDashboard() {
       )}
 
       {/* SubTab: Interventions Tracker */}
-      {selectedSubTab === 'interventions' || selectedSubTab === 'skillgap' ? (
+      {(currentTab === 'interventions' || currentTab === 'skillgap') && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex justify-between items-center">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -382,7 +365,7 @@ export default function DistrictSkillOfficerDashboard() {
             ))}
           </div>
         </div>
-      ) : null}
+      )}
 
       {/* Create Intervention Modal */}
       {showInterventionModal && (

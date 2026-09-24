@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Home,
   Sparkles,
@@ -39,6 +39,11 @@ interface RoleDashboardDispatcherProps {
 export default function RoleDashboardDispatcher({ onNavigateHome }: RoleDashboardDispatcherProps) {
   const { currentRole } = useRole();
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  // Reset tab to dashboard overview when switching persona/role
+  useEffect(() => {
+    setActiveTab('dashboard');
+  }, [currentRole]);
 
   // If State Skill Officer is selected, render the exact untouched existing State Skill Officer Dashboard
   if (currentRole === 'officer') {
@@ -116,21 +121,21 @@ export default function RoleDashboardDispatcher({ onNavigateHome }: RoleDashboar
   const renderRoleDashboard = () => {
     switch (currentRole) {
       case 'student':
-        return <StudentDashboard />;
+        return <StudentDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       case 'provider':
-        return <TrainingProviderDashboard />;
+        return <TrainingProviderDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       case 'employer':
-        return <EmployerDashboard />;
+        return <EmployerDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       case 'district':
-        return <DistrictSkillOfficerDashboard />;
+        return <DistrictSkillOfficerDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       case 'college':
-        return <InstitutionDashboard />;
+        return <InstitutionDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       case 'policy':
-        return <PolicyOfficerDashboard />;
+        return <PolicyOfficerDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       case 'admin':
-        return <AdminDashboard />;
+        return <AdminDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
       default:
-        return <StudentDashboard />;
+        return <StudentDashboard activeTab={activeTab} onSelectTab={setActiveTab} />;
     }
   };
 

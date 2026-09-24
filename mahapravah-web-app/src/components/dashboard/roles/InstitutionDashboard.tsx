@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   GraduationCap,
   BookOpen,
@@ -10,9 +9,14 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 
-export default function InstitutionDashboard() {
+interface InstitutionDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function InstitutionDashboard({ activeTab = 'dashboard', onSelectTab: _onSelectTab }: InstitutionDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'departments' | 'gap' | 'partners' | 'reports'>('overview');
+  const currentTab = (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') ? 'overview' : activeTab;
 
   const kpis = [
     {
@@ -111,28 +115,7 @@ export default function InstitutionDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Pills ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'Employability Overview', mr: 'रोजगार सज्जता आढावा' },
-          { id: 'departments', en: 'Departmental Distribution', mr: 'विभागनिहाय वाटप' },
-          { id: 'gap', en: 'Academic vs Industry Gap', mr: 'अभ्यासक्रम तूट विश्लेषण' },
-          { id: 'partners', en: 'Industry Linkages & Drives', mr: 'उद्योग भागीदारी व ड्राइव्ह' },
-          { id: 'reports', en: 'Accreditation Reports', mr: 'मान्यता व अहवाल' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
+
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -165,7 +148,7 @@ export default function InstitutionDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {currentTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: Employability Pipeline & Department Benchmarking (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -279,7 +262,7 @@ export default function InstitutionDashboard() {
       )}
 
       {/* SubTab: Departments */}
-      {selectedSubTab === 'departments' && (
+      {currentTab === 'departments' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'विभागनिहाय सखोल कामगिरी आणि कौशल्य केंद्र' : 'Departmental Center of Excellence (CoE) Performance'}
@@ -303,7 +286,7 @@ export default function InstitutionDashboard() {
       )}
 
       {/* SubTab: Academic vs Industry Gap */}
-      {selectedSubTab === 'gap' && (
+      {currentTab === 'gap' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'उद्योग तूट भरून काढण्यासाठी शिफारस केलेले पूरक अभ्यासक्रम' : 'Bridge Courses Recommended to Eliminate Curriculum Gaps'}
@@ -317,7 +300,7 @@ export default function InstitutionDashboard() {
       )}
 
       {/* SubTab: Partners */}
-      {selectedSubTab === 'partners' && (
+      {currentTab === 'partners' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'अधिकृत उद्योग भागीदार आणि सामंजस्य करार (MoUs)' : 'Corporate Industry Partners & Active MoUs'}
@@ -334,7 +317,7 @@ export default function InstitutionDashboard() {
       )}
 
       {/* SubTab: Reports */}
-      {selectedSubTab === 'reports' && (
+      {currentTab === 'reports' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'अधिकृत शैक्षणिक व रोजगार मान्यता अहवाल' : 'Official Higher Education Regulatory Submissions'}

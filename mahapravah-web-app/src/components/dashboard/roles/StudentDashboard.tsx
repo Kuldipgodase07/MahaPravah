@@ -13,11 +13,32 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 
-export default function StudentDashboard() {
+interface StudentDashboardProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function StudentDashboard({ activeTab = 'dashboard', onSelectTab }: StudentDashboardProps) {
   const { isMarathi } = useLanguage();
-  const [selectedSubTab, setSelectedSubTab] = useState<'overview' | 'ai' | 'training' | 'jobs' | 'profile'>('overview');
   const [appliedJobs, setAppliedJobs] = useState<Record<string, boolean>>({ 'job-1': true });
   const [profileMissingCompleted, setProfileMissingCompleted] = useState(false);
+
+  // Map sidebar activeTab to current view
+  const currentTab = (() => {
+    if (!activeTab || activeTab === 'dashboard' || activeTab === 'overview') return 'overview';
+    if (activeTab === 'ai-career' || activeTab === 'ai') return 'ai';
+    if (activeTab === 'training') return 'training';
+    if (activeTab === 'jobs') return 'jobs';
+    if (activeTab === 'profile') return 'profile';
+    if (activeTab === 'placement') return 'placement';
+    return activeTab;
+  })();
+
+  const handleTabChange = (target: string) => {
+    if (onSelectTab) {
+      onSelectTab(target);
+    }
+  };
 
   const kpis = [
     {
@@ -227,28 +248,7 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* ── Sub-navigation Pills ── */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
-        {[
-          { id: 'overview', en: 'Dashboard Overview', mr: 'डॅशबोर्ड आढावा' },
-          { id: 'ai', en: 'AI Career Intelligence', mr: 'एआय करिअर बुद्धिमत्ता' },
-          { id: 'training', en: 'My Courses & Sessions', mr: 'माझे अभ्यासक्रम व सत्रे' },
-          { id: 'jobs', en: 'Smart Job Matches', mr: 'स्मार्ट नोकरी संधी' },
-          { id: 'profile', en: 'Career Profile', mr: 'करिअर प्रोफाइल' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedSubTab(tab.id as typeof selectedSubTab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              selectedSubTab === tab.id
-                ? 'bg-[#7B2400] text-white shadow-xs'
-                : 'bg-white border border-[#E8D4C2] text-slate-700 hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {isMarathi ? tab.mr : tab.en}
-          </button>
-        ))}
-      </div>
+
 
       {/* ── 6 Top KPI Metrics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
@@ -281,7 +281,7 @@ export default function StudentDashboard() {
       </div>
 
       {/* ── Tab Views ── */}
-      {selectedSubTab === 'overview' && (
+      {currentTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 flex-1 min-h-0 overflow-y-auto">
           {/* Left Column: AI Recommendations & Placement Timeline (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-2">
@@ -357,7 +357,7 @@ export default function StudentDashboard() {
                       : '💡 Acquiring these 3 skills increases candidate interview shortlisting by 32%.'}
                   </span>
                   <button
-                    onClick={() => setSelectedSubTab('ai')}
+                    onClick={() => handleTabChange('ai-career')}
                     className="text-[10.5px] font-bold text-[#F56600] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <span>{isMarathi ? 'मार्ग पहा' : 'View Pathway'}</span>
@@ -501,7 +501,7 @@ export default function StudentDashboard() {
               </div>
 
               <button
-                onClick={() => setSelectedSubTab('jobs')}
+                onClick={() => handleTabChange('jobs')}
                 className="w-full mt-2 py-1.5 text-center text-xs font-bold text-[#F56600] hover:bg-[#FFF0E6] rounded-lg transition-colors cursor-pointer"
               >
                 {isMarathi ? 'सर्व उपलब्ध नोकऱ्या पहा (२८) →' : 'Explore All 28 Matched Jobs →'}
@@ -512,7 +512,7 @@ export default function StudentDashboard() {
       )}
 
       {/* SubTab: AI Career Intelligence Deep-Dive */}
-      {selectedSubTab === 'ai' && (
+      {currentTab === 'ai' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex items-center justify-between border-b border-stone-200 pb-2">
             <div>
@@ -558,7 +558,7 @@ export default function StudentDashboard() {
       )}
 
       {/* SubTab: Training & Courses */}
-      {selectedSubTab === 'training' && (
+      {currentTab === 'training' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
             {isMarathi ? 'माझे नोंदणीकृत अभ्यासक्रम आणि आगामी सत्रे' : 'Enrolled Courses & Upcoming Sessions'}
@@ -593,7 +593,7 @@ export default function StudentDashboard() {
       )}
 
       {/* SubTab: Jobs */}
-      {selectedSubTab === 'jobs' && (
+      {currentTab === 'jobs' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-2.5">
           <div className="flex items-center justify-between">
             <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
@@ -630,7 +630,7 @@ export default function StudentDashboard() {
       )}
 
       {/* SubTab: Career Profile */}
-      {selectedSubTab === 'profile' && (
+      {currentTab === 'profile' && (
         <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
           <div className="flex items-center gap-3">
             <img
@@ -664,6 +664,50 @@ export default function StudentDashboard() {
                 <strong>Preferred Locations:</strong> Pune, Pimpri-Chinchwad, Mumbai<br />
                 <strong>Expected CTC:</strong> ₹4.2 - ₹6.0 LPA
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SubTab: Placement Tracking */}
+      {currentTab === 'placement' && (
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-[#E8D4C2] shadow-2xs flex-1 overflow-y-auto space-y-3">
+          <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+            <div>
+              <h2 className="text-sm sm:text-base font-bold text-[#8C3310]">
+                {isMarathi ? 'सक्रिय प्लेसमेंट प्रगती ट्रॅकर व टप्पे' : 'Active Placement Pipeline & Milestones'}
+              </h2>
+              <p className="text-xs text-slate-500">
+                {isMarathi ? 'टाटा ऑटोकॉम्प सिस्टीम्स लिमिटेड - कनिष्ठ डेटा विश्लेषक भरती प्रगती' : 'Tata AutoComp Systems Ltd • Junior Data Analyst candidate pipeline'}
+              </p>
+            </div>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+              Stage: Selected (Final Offer Released)
+            </span>
+          </div>
+          <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#F1E5D8]">
+            <div className="grid grid-cols-5 gap-2 text-center py-2">
+              {[
+                { step: isMarathi ? 'अर्ज दाखल' : 'Applied', done: true, date: '10 Aug 2025' },
+                { step: isMarathi ? 'शॉर्टलिस्ट' : 'Shortlisted', done: true, date: '18 Aug 2025' },
+                { step: isMarathi ? 'तांत्रिक मुलाखत' : 'Interview', done: true, date: '28 Aug 2025' },
+                { step: isMarathi ? 'निवड झाली' : 'Selected', done: true, date: '04 Sep 2025' },
+                { step: isMarathi ? 'हजर होणे' : 'Joining Date', done: false, date: '01 Oct 2025' },
+              ].map((s, idx) => (
+                <div key={s.step} className="flex flex-col items-center">
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${
+                      s.done
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'bg-stone-200 text-stone-500 border border-stone-300'
+                    }`}
+                  >
+                    {s.done ? '✓' : idx + 1}
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-800 mt-2 leading-tight">{s.step}</span>
+                  <span className="text-[10px] text-slate-500 mt-0.5">{s.date}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
