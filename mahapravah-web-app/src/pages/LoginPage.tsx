@@ -17,6 +17,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useRole } from '../context/RoleContext';
 
 interface LoginPageProps {
   onNavigateHome?: () => void;
@@ -24,6 +25,7 @@ interface LoginPageProps {
 
 export default function LoginPage({ onNavigateHome }: LoginPageProps) {
   const { lang, setLang, isMarathi } = useLanguage();
+  const { setRole } = useRole();
   const [loginType, setLoginType] = useState<'individual' | 'organization'>('individual');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -42,7 +44,8 @@ export default function LoginPage({ onNavigateHome }: LoginPageProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    window.location.hash = '#dashboard';
+    // Always enter as State Skill Officer; role switching is available in the dashboard header.
+    setRole('officer');
   };
 
   // Platform localized strings
@@ -340,8 +343,10 @@ export default function LoginPage({ onNavigateHome }: LoginPageProps) {
               {content.welcomeSub}
             </p>
 
+
+
             {/* Segmented Switcher: Individual Login vs Organization Login */}
-            <div className="mt-3.5 p-1 rounded-xl bg-[#F4F1EA] flex gap-1">
+            <div className="mt-2.5 p-1 rounded-xl bg-[#F4F1EA] flex gap-1">
               <button
                 type="button"
                 onClick={() => setLoginType('individual')}
@@ -367,7 +372,7 @@ export default function LoginPage({ onNavigateHome }: LoginPageProps) {
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit} className="mt-3.5 space-y-3 sm:space-y-3.5">
+            <form onSubmit={handleSubmit} className="mt-2.5 space-y-2.5 sm:space-y-3">
               {/* Mobile Number / Email ID */}
               <div>
                 <label className="block text-[11.5px] font-bold text-stone-700 mb-1">

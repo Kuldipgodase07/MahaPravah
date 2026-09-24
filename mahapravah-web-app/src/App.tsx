@@ -3,8 +3,9 @@ import { AnimatePresence } from 'framer-motion';
 import SplashPage from './pages/SplashPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
-import OfficerDashboardPage from './pages/OfficerDashboardPage';
+import RoleDashboardDispatcher from './pages/RoleDashboardDispatcher';
 import { LanguageProvider } from './context/LanguageContext';
+import { RoleProvider } from './context/RoleContext';
 
 export default function App() {
   const [splashDone, setSplashDone] = useState(false);
@@ -28,25 +29,28 @@ export default function App() {
   }, []);
 
   const isLoginPage = currentHash === '#login';
-  const isDashboardPage = currentHash === '#dashboard' || currentHash === '#officer-dashboard';
+  const isDashboardPage =
+    currentHash === '#dashboard' ||
+    currentHash.endsWith('-dashboard');
 
   return (
     <LanguageProvider>
-      <AnimatePresence mode="wait">
-        {!splashDone && !isLoginPage && !isDashboardPage && (
-          <SplashPage key="splash" onComplete={handleSplashComplete} />
+      <RoleProvider>
+        <AnimatePresence mode="wait">
+          {!splashDone && !isLoginPage && !isDashboardPage && (
+            <SplashPage key="splash" onComplete={handleSplashComplete} />
+          )}
+        </AnimatePresence>
+        {(splashDone || isLoginPage || isDashboardPage) && (
+          isLoginPage ? (
+            <LoginPage onNavigateHome={handleNavigateHome} />
+          ) : isDashboardPage ? (
+            <RoleDashboardDispatcher onNavigateHome={handleNavigateHome} />
+          ) : (
+            <LandingPage />
+          )
         )}
-      </AnimatePresence>
-      {(splashDone || isLoginPage || isDashboardPage) && (
-        isLoginPage ? (
-          <LoginPage onNavigateHome={handleNavigateHome} />
-        ) : isDashboardPage ? (
-          <OfficerDashboardPage onNavigateHome={handleNavigateHome} />
-        ) : (
-          <LandingPage />
-        )
-      )}
+      </RoleProvider>
     </LanguageProvider>
   );
 }
-
