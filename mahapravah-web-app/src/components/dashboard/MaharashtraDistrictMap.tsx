@@ -115,18 +115,15 @@ export default function MaharashtraDistrictMap() {
         {/* Left Map Image Vector representation */}
         <div className="col-span-7 flex flex-col items-center justify-center relative min-h-[190px]">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Maharashtra_locator_map.svg"
-            alt="Maharashtra Map"
+            src="/maharashtra-district-map.png"
+            alt={isMarathi ? 'महाराष्ट्र नकाशा' : 'Maharashtra Map'}
             className="w-full h-44 object-contain filter drop-shadow-xs"
-            onError={(e) => {
-              (e.currentTarget as HTMLElement).style.display = 'none';
-            }}
           />
 
           {/* Map Legend */}
           <div className="flex items-center gap-3 text-[10px] text-slate-500 mt-2">
             <div className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded bg-[#9A2A06]" />
+              <span className="w-2.5 h-2.5 rounded bg-[#7B2400]" />
               <span>≥ 70%</span>
             </div>
             <div className="flex items-center gap-1">
