@@ -11,6 +11,7 @@ import {
   ChevronRight,
   LogOut,
   Check,
+  Headphones,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
@@ -81,9 +82,7 @@ export default function DashboardShell({
   const renderNavList = (collapsed: boolean) => (
     <div className="flex flex-col justify-between h-full">
       {/* Upper Navigation: Role-Specific Items */}
-      <nav className="space-y-1 w-full overflow-y-auto max-h-[calc(100vh-190px)] pr-1 scrollbar-thin">
-
-
+      <nav className="space-y-1 w-full overflow-y-auto max-h-[calc(100vh-270px)] pr-1 scrollbar-thin">
         {roleNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -97,35 +96,77 @@ export default function DashboardShell({
                 setMobileOpen(false);
               }}
               title={collapsed ? displayLabel : undefined}
-              className={`w-full flex items-center transition-all duration-200 text-left rounded-lg cursor-pointer ${
+              className={`w-full flex items-center transition-all duration-200 text-left rounded-xl cursor-pointer ${
                 collapsed
                   ? 'justify-center p-2'
-                  : 'gap-2.5 px-3 py-1.5 sm:py-2 text-[12.5px] xl:text-[13px] font-medium'
+                  : 'gap-2.5 px-3 py-1.5 sm:py-2 text-[12px] xl:text-[12.5px] font-medium'
               } ${
                 isActive
-                  ? 'bg-[#7B2400] text-white font-bold shadow-xs'
-                  : 'text-[#3B281C] hover:bg-[#FBEFDF]/80 hover:text-[#7B2400]'
+                  ? role === 'student'
+                    ? 'bg-[#FFF0E6] text-[#E35314] font-bold shadow-2xs border border-[#FCDCC9]'
+                    : 'bg-[#7B2400] text-white font-bold shadow-xs'
+                  : 'text-[#475569] hover:bg-[#FBEFDF]/80 hover:text-[#7B2400]'
               }`}
             >
-              <Icon size={16} className={isActive ? 'text-white' : 'text-[#614535] shrink-0'} />
+              <Icon
+                size={16}
+                className={
+                  isActive
+                    ? role === 'student'
+                      ? 'text-[#E35314] shrink-0'
+                      : 'text-white shrink-0'
+                    : 'text-[#64748B] shrink-0'
+                }
+              />
               {!collapsed && <span className="truncate">{displayLabel}</span>}
             </button>
           );
         })}
       </nav>
 
-      {/* Bottom Common Shell Items */}
-      <div className="pt-2 border-t border-[#DFC7B2]/70 space-y-1">
+      {/* Bottom Common Shell Items & Support Card */}
+      <div className="pt-2 border-t border-[#DFC7B2]/70 space-y-2 shrink-0">
+        {!collapsed && (
+          <div className="p-2.5 rounded-xl bg-[#FFF8F3] border border-[#F1E5D8] flex flex-col gap-1.5 shadow-2xs">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-[#FFEADA] text-[#E35314] flex items-center justify-center shrink-0">
+                <Headphones size={13} />
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-slate-800 leading-tight">
+                  {isMarathi ? 'मदत हवी आहे?' : 'Need Help?'}
+                </p>
+                <p className="text-[9px] text-slate-500 leading-tight">
+                  {isMarathi ? 'आमच्या सहाय्यकांशी संपर्क साधा' : 'Contact our support assistants'}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => alert('Support helpline: 1800-120-8040 / support@mahapravah.gov.in')}
+              className="w-full py-1 rounded-md border border-[#E35314] text-[#E35314] text-[10px] font-bold hover:bg-[#FFEFE5] transition-colors flex items-center justify-center gap-1 cursor-pointer"
+            >
+              <span>{isMarathi ? 'संपर्क करा' : 'Contact Us'}</span>
+              <span>→</span>
+            </button>
+          </div>
+        )}
+
         <button
           onClick={handleLogout}
           title={collapsed ? (isMarathi ? 'बाहेर पडा' : 'Sign Out') : undefined}
           className={`w-full flex items-center text-left rounded-lg text-[#8C3310] hover:bg-[#FEE4E2]/60 hover:text-red-700 transition-colors cursor-pointer ${
-            collapsed ? 'justify-center p-2' : 'gap-2.5 px-3 py-1.5 text-xs font-semibold'
+            collapsed ? 'justify-center p-2' : 'gap-2 px-3 py-1 text-xs font-semibold'
           }`}
         >
-          <LogOut size={15} className="shrink-0" />
-          {!collapsed && <span>{isMarathi ? 'बाहेर पडा (Logout)' : 'Sign Out'}</span>}
+          <LogOut size={14} className="shrink-0" />
+          {!collapsed && <span>{isMarathi ? 'बाहेर पडा' : 'Sign Out'}</span>}
         </button>
+
+        {!collapsed && (
+          <div className="flex justify-center opacity-40 pt-1 pointer-events-none">
+            <img src="/sidebar-bottom-quote-monument.png" alt="" className="h-9 w-auto object-contain" />
+          </div>
+        )}
       </div>
     </div>
   );

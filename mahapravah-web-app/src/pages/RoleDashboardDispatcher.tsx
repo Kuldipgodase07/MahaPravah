@@ -19,6 +19,11 @@ import {
   ShieldCheck,
   Activity,
   Layers,
+  Search,
+  Compass,
+  GraduationCap,
+  Bell,
+  Settings,
 } from 'lucide-react';
 import { useRole } from '../context/RoleContext';
 import DashboardShell from '../components/dashboard/DashboardShell';
@@ -55,12 +60,18 @@ export default function RoleDashboardDispatcher({ onNavigateHome }: RoleDashboar
     switch (currentRole) {
       case 'student':
         return [
-          { id: 'dashboard', labelEn: 'Dashboard Overview', labelMr: 'डॅशबोर्ड आढावा', icon: Home },
-          { id: 'ai-career', labelEn: 'AI Career Intelligence', labelMr: 'एआय करिअर बुद्धिमत्ता', icon: Sparkles },
-          { id: 'training', labelEn: 'My Training & Courses', labelMr: 'माझे प्रशिक्षण व अभ्यासक्रम', icon: BookOpen },
-          { id: 'jobs', labelEn: 'Smart Job Opportunities', labelMr: 'स्मार्ट नोकरी संधी', icon: Briefcase },
-          { id: 'placement', labelEn: 'Placement Tracking', labelMr: 'प्लेसमेंट प्रगती ट्रॅकर', icon: CheckCircle2 },
-          { id: 'profile', labelEn: 'Career Profile', labelMr: 'करिअर प्रोफाइल', icon: User },
+          { id: 'dashboard', labelEn: 'Dashboard', labelMr: 'डॅशबोर्ड', icon: Home },
+          { id: 'profile', labelEn: 'My Profile', labelMr: 'माझे प्रोफाइल', icon: User },
+          { id: 'search-courses', labelEn: 'Search Courses', labelMr: 'अभ्यासक्रम शोधा', icon: Search },
+          { id: 'my-courses', labelEn: 'My Courses', labelMr: 'माझे अभ्यासक्रम', icon: BookOpen },
+          { id: 'track-progress', labelEn: 'Track Progress', labelMr: 'प्रगतीचा मागोवा', icon: BarChart3 },
+          { id: 'skill-assessment', labelEn: 'Skill Assessment', labelMr: 'कौशल्य मूल्यांकन', icon: TrendingUp },
+          { id: 'jobs', labelEn: 'Job Opportunities', labelMr: 'नोकरी संधी', icon: Briefcase },
+          { id: 'scholarships', labelEn: 'Scholarships & Schemes', labelMr: 'शिष्यवृत्ती व योजना', icon: GraduationCap },
+          { id: 'career-advice', labelEn: 'Guidance & Career Advice', labelMr: 'मार्गदर्शन व करिअर सल्ला', icon: Compass },
+          { id: 'notifications', labelEn: 'Notifications & Updates', labelMr: 'सूचना व अपडेट्स', icon: Bell },
+          { id: 'certificates', labelEn: 'Certificates', labelMr: 'प्रमाणपत्रे', icon: Award },
+          { id: 'settings', labelEn: 'Settings', labelMr: 'सेटिंग्ज', icon: Settings },
         ];
       case 'provider':
         return [
