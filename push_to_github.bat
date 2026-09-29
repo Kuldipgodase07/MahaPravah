@@ -4,47 +4,54 @@ setlocal enabledelayedexpansion
 echo ========================================================
 echo        MahaPravah - Push Whole Project to GitHub
 echo ========================================================
+echo Target Repo: https://github.com/Kuldipgodase07/MahaPravah.git
+echo Branch     : main
+echo ========================================================
 echo.
 
-:: Ensure we are in the script's directory
+:: Ensure we are in the repository directory
 cd /d "%~dp0"
 
-:: Check if git is installed
+:: Check git installation
 where git >nul 2>nul
 if %ERRORLEVEL% neq 0 (
-    echo [ERROR] Git is not installed or not in PATH.
+    echo [ERROR] Git is not installed or not in your system PATH.
+    echo Please install Git from https://git-scm.com/
+    echo.
     pause
     exit /b 1
 )
 
-:: Set remote URL if not configured
+:: Ensure remote origin is set
 set REPO_URL=https://github.com/Kuldipgodase07/MahaPravah.git
 git remote get-url origin >nul 2>nul
 if %ERRORLEVEL% neq 0 (
-    echo [INFO] Setting remote origin to %REPO_URL%...
+    echo [INFO] Adding remote origin: %REPO_URL%
     git remote add origin %REPO_URL%
 ) else (
     git remote set-url origin %REPO_URL%
 )
 
-:: Staging all files
+:: 1. Stage all changes
 echo [1/3] Staging all files and changes...
 git add -A
 
-:: Check if there are changes to commit
-git status --porcelain | findstr "^" >nul
-if %ERRORLEVEL% equ 0 (
+:: 2. Commit changes if any exist
+git diff --cached --quiet
+if %ERRORLEVEL% neq 0 (
+    echo.
     set /p "COMMIT_MSG=Enter commit message (Press Enter for default): "
     if "!COMMIT_MSG!"=="" (
         set "COMMIT_MSG=Update MahaPravah project files [%date% %time%]"
     )
-    echo [2/3] Committing changes with message: "!COMMIT_MSG!"...
+    echo [2/3] Committing changes: "!COMMIT_MSG!"...
     git commit -m "!COMMIT_MSG!"
 ) else (
-    echo [2/3] No local uncommitted changes detected.
+    echo [2/3] Working tree clean (all changes already committed).
 )
 
-:: Push to GitHub
+:: 3. Push to main branch
+echo.
 echo [3/3] Pushing to GitHub (origin main)...
 git branch -M main
 git push -u origin main
@@ -53,13 +60,21 @@ if %ERRORLEVEL% equ 0 (
     echo.
     echo ========================================================
     echo    SUCCESS: Project successfully pushed to GitHub!
-    echo    Repository: https://github.com/Kuldipgodase07/MahaPravah
+    echo    URL: https://github.com/Kuldipgodase07/MahaPravah
     echo ========================================================
 ) else (
     echo.
     echo ========================================================
-    echo    [ERROR] Git push failed. Please check your credentials
-    echo    or network connection and try again.
+    echo  [!] Git push requires authentication.
+    echo.
+    echo  If a browser window or login popup appeared, please sign
+    echo  in with your GitHub account (Kuldipgodase07).
+    echo.
+    echo  Alternatively, you can authenticate using a Personal
+    echo  Access Token (PAT):
+    echo  1. Go to: https://github.com/settings/tokens
+    echo  2. Generate a token with 'repo' permissions
+    echo  3. Run: git push https://<YOUR_TOKEN>@github.com/Kuldipgodase07/MahaPravah.git main
     echo ========================================================
 )
 
