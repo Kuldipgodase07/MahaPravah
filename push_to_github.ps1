@@ -1,6 +1,9 @@
 Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host "       MahaPravah - Push Whole Project to GitHub" -ForegroundColor Cyan
 Write-Host "========================================================" -ForegroundColor Cyan
+Write-Host "Target Repo: https://github.com/Kuldipgodase07/MahaPravah.git" -ForegroundColor Cyan
+Write-Host "Branch     : main" -ForegroundColor Cyan
+Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host ""
 
 Set-Location -Path $PSScriptRoot
@@ -16,10 +19,10 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "No new changes to commit." -ForegroundColor Gray
 }
 
-Write-Host "`n[3/3] Pushing to GitHub (origin main)..." -ForegroundColor Yellow
+Write-Host "`n[3/3] Pushing to GitHub (origin main --force)..." -ForegroundColor Yellow
 git branch -M main
 git remote set-url origin https://github.com/Kuldipgodase07/MahaPravah.git
-git push -u origin main
+git push -u origin main --force
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "`n========================================================" -ForegroundColor Green
